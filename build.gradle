@@ -9,20 +9,50 @@
 plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
+    id 'eclipse'
+    id 'maven-publish'
 }
+
+group = 'PruebaPractica'
+version = '0.0'
+sourceCompatibility = '14'
 
 repositories {
     // Use jcenter for resolving dependencies.
     // You can declare any Maven/Ivy/file repository here.
-    jcenter()
+        jcenter()
+    mavenCentral()
+    maven {
+		name = "GitHubPackages"
+		url = uri("https://maven.pkg.github.com/sammorfer/AbstractFactoryPattern")
+		credentials {
+		username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
+		password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+		}
+	}
 }
-
+publishing {
+    repositories {
+        maven {
+            name = "PaqueteExamen"
+            url = uri("https://maven.pkg.github.com/sammorfer/AbstractFactoryPattern")
+            credentials {
+            //las propiedades gpr.user y gpr.key están configuradas en gradle.properties en el raiz del proyecto, y se añade a .gitignore para que no se suban
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+            }
+		}
+	}
+}
+        	
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     api 'org.apache.commons:commons-math3:3.6.1'
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:28.2-jre'
+    api "com.hazelcast:hazelcast:3.6.4"
+    api "com.hazelcast:hazelcast-client:3.6.4"
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
