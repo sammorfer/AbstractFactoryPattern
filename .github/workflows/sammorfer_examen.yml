@@ -1,0 +1,37 @@
+# Mi workflow
+
+name: sammorfer_examen.yml
+
+# Controla cuando va a correr
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '59 23 * * 0'
+
+# 2 trabajos
+jobs:
+  trabajo1:
+
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v2
+      - name: Permiso a Gradlew
+        run: chmod +x gradlew
+        
+      - name: Run a one-line script
+        run: echo Permiso gradlew
+  trabajo2:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ejecución Construcción
+        run: ./gradlew assemble
+      - name: Ejecucion Test
+        run: ./gradlew test
+      - name: Documentacion javadoc
+        run: ./gradlew javadoc
+
+      - name: Run a one-line script
+        run: echo Construcción, Test y Documentacion Javadoc
